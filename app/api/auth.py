@@ -13,15 +13,29 @@ class SignupRequest(BaseModel):
 
 @router.post("/signup")
 def signup(data: SignupRequest):
+    print("🟢 Signup endpoint hit!")
+    print("📩 Raw signup data:", data.dict())
+
     db = SessionLocal()
-    if db.query(User).filter(User.email == data.email).first():
+
+    # Check if user already exists
+    existing_user = db.query(User).filter(User.email == data.email).first()
+    if existing_user:
+        print("⚠️ Email already registered:", data.email)
         raise HTTPException(status_code=400, detail="Email already registered.")
-    hashed_pw = get_password_hash(data.password)
-    user = User(name=data.name, email=data.email, hashed_password=hashed_pw)
-    db.add(user)
-    db.commit()
-    token = create_access_token({"sub": user.email})
-    return {"access_token": token, "token_type": "bearer"}
+
+    try:
+        hashed_pw = get_password_hash(data.password)
+        user = User(name=data.name, email=data.email, hashed_password=hashed_pw)
+        db.add(user)
+        db.commit()
+        token = create_access_token({"sub": user.email})
+        print("✅ User created successfully:", user.email)
+        return {"access_token": token, "token_type": "bearer"}
+    except Exception as e:
+        print("❌ Signup failed with error:", str(e))
+        raise HTTPException(status_code=500, detail="Server error: " + str(e))
+
 
 class LoginRequest(BaseModel):
     email: str
