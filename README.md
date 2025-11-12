@@ -192,6 +192,3 @@ https://github.com/user-attachments/assets/37717f03-5edd-421f-bc7c-dd481efbec32
 ⭐ *Built with ❤️ using FastAPI, Passlib, and JWT Authentication — deployed on Render.*
 
 ```
-
-2. Make the frontend README slightly simpler and UI-focused?
-```
