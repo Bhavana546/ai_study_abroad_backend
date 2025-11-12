@@ -6,7 +6,8 @@ SECRET_KEY = "your_jwt_secret_here"  # later use env variable
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwd_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
+
 
 def get_password_hash(password: str) -> str:
     # Ensure string and trim within bcrypt’s safe limit
